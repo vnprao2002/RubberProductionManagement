@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RubberProductionManagement", "RubberProductionManagement\RubberProductionManagement.csproj", "{F33BA89A-59B1-47AD-AB63-843EBD6232FD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F33BA89A-59B1-47AD-AB63-843EBD6232FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F33BA89A-59B1-47AD-AB63-843EBD6232FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F33BA89A-59B1-47AD-AB63-843EBD6232FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F33BA89A-59B1-47AD-AB63-843EBD6232FD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4E20DD5B-E5AB-4311-B570-5737677587D6}
+	EndGlobalSection
+EndGlobal
