@@ -1,13 +1,13 @@
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using RubberProductionManagement.API.Models;
+using RubberProductionManagement.Models;
 
-namespace RubberProductionManagement.API.Data
+namespace RubberProductionManagement.Data
 {
-    public class AppDbContext : IdentityDbContext<User>
+    public class AppDbContext : DbContext 
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
+        public DbSet<User> Users { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Team> Teams { get; set; }
         public DbSet<RubberLot> RubberLots { get; set; }
@@ -18,4 +18,4 @@ namespace RubberProductionManagement.API.Data
         public DbSet<Salary> Salaries { get; set; }
         public DbSet<AuditLog> AuditLogs { get; set; }
     }
-} 
+}

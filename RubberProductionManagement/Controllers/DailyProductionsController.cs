@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using RubberProductionManagement.API.Data;
-using RubberProductionManagement.API.Models;
+using RubberProductionManagement.Data;
+using RubberProductionManagement.Models;
 
-namespace RubberProductionManagement.API.Controllers
+namespace RubberProductionManagement.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

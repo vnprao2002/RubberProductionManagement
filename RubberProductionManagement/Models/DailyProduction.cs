@@ -1,4 +1,4 @@
-namespace RubberProductionManagement.API.Models
+namespace RubberProductionManagement.Models
 {
     public class DailyProduction
     {
