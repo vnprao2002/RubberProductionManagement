@@ -13,5 +13,6 @@ namespace RubberProductionManagement.Models
         public double Price { get; set; }
         public double TotalSalary { get; set; }
         public DateTime CreatedAt { get; set; }
+        public string? Description { get; set; }
     }
 } 

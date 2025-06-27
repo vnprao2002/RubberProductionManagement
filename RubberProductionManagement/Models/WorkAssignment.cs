@@ -15,6 +15,7 @@
         public DateTime? ActualEndDate { get; set; }
         public int TappingTimes { get; set; }
         public string? Note { get; set; }
+        public string? Description { get; set; }
         public ICollection<DailyProduction>? DailyProductions { get; set; }
     }
 } 

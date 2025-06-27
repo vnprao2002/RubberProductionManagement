@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RubberProductionManagement.Data;
 using RubberProductionManagement.Models;
+using RubberProductionManagement.Services;
+using Newtonsoft.Json;
 
 namespace RubberProductionManagement.Controllers
 {
@@ -10,9 +12,11 @@ namespace RubberProductionManagement.Controllers
     public class RubberLotsController : ControllerBase
     {
         private readonly AppDbContext _context;
-        public RubberLotsController(AppDbContext context)
+        private readonly AuditLogService _auditLogService;
+        public RubberLotsController(AppDbContext context, AuditLogService auditLogService)
         {
             _context = context;
+            _auditLogService = auditLogService;
         }
 
         [HttpGet]
@@ -35,6 +39,13 @@ namespace RubberProductionManagement.Controllers
         {
             _context.RubberLots.Add(lot);
             await _context.SaveChangesAsync();
+            await _auditLogService.LogAsync(
+                action: "Create",
+                tableName: "RubberLot",
+                recordId: lot.Id.ToString(),
+                changes: JsonConvert.SerializeObject(lot),
+                description: "Thêm mới lô cạo"
+            );
             return CreatedAtAction(nameof(Get), new { id = lot.Id }, lot);
         }
 
@@ -44,6 +55,13 @@ namespace RubberProductionManagement.Controllers
             if (id != lot.Id) return BadRequest();
             _context.Entry(lot).State = EntityState.Modified;
             await _context.SaveChangesAsync();
+            await _auditLogService.LogAsync(
+                action: "Update",
+                tableName: "RubberLot",
+                recordId: lot.Id.ToString(),
+                changes: JsonConvert.SerializeObject(lot),
+                description: "Cập nhật lô cạo"
+            );
             return NoContent();
         }
 
@@ -54,6 +72,13 @@ namespace RubberProductionManagement.Controllers
             if (lot == null) return NotFound();
             _context.RubberLots.Remove(lot);
             await _context.SaveChangesAsync();
+            await _auditLogService.LogAsync(
+                action: "Delete",
+                tableName: "RubberLot",
+                recordId: id.ToString(),
+                changes: JsonConvert.SerializeObject(lot),
+                description: "Xóa lô cạo"
+            );
             return NoContent();
         }
     }

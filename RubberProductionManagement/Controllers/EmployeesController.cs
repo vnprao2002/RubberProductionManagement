@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RubberProductionManagement.Data;
 using RubberProductionManagement.Models;
+using RubberProductionManagement.Services;
+using Newtonsoft.Json;
 
 namespace RubberProductionManagement.Controllers
 {
@@ -10,9 +12,11 @@ namespace RubberProductionManagement.Controllers
     public class EmployeesController : ControllerBase
     {
         private readonly AppDbContext _context;
-        public EmployeesController(AppDbContext context)
+        private readonly AuditLogService _auditLogService;
+        public EmployeesController(AppDbContext context, AuditLogService auditLogService)
         {
             _context = context;
+            _auditLogService = auditLogService;
         }
 
         [HttpGet]
@@ -54,6 +58,13 @@ namespace RubberProductionManagement.Controllers
         {
             _context.Employees.Add(employee);
             await _context.SaveChangesAsync();
+            await _auditLogService.LogAsync(
+                action: "Create",
+                tableName: "Employee",
+                recordId: employee.Id.ToString(),
+                changes: JsonConvert.SerializeObject(employee),
+                description: "Thêm mới nhân viên"
+            );
             return CreatedAtAction(nameof(Get), new { id = employee.Id }, employee);
         }
 
@@ -63,6 +74,13 @@ namespace RubberProductionManagement.Controllers
             if (id != employee.Id) return BadRequest();
             _context.Entry(employee).State = EntityState.Modified;
             await _context.SaveChangesAsync();
+            await _auditLogService.LogAsync(
+                action: "Update",
+                tableName: "Employee",
+                recordId: employee.Id.ToString(),
+                changes: JsonConvert.SerializeObject(employee),
+                description: "Cập nhật nhân viên"
+            );
             return NoContent();
         }
 
@@ -73,6 +91,13 @@ namespace RubberProductionManagement.Controllers
             if (employee == null) return NotFound();
             _context.Employees.Remove(employee);
             await _context.SaveChangesAsync();
+            await _auditLogService.LogAsync(
+                action: "Delete",
+                tableName: "Employee",
+                recordId: id.ToString(),
+                changes: JsonConvert.SerializeObject(employee),
+                description: "Xóa nhân viên"
+            );
             return NoContent();
         }
     }

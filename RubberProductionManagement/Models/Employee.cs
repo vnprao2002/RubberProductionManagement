@@ -13,6 +13,7 @@ namespace RubberProductionManagement.Models
         public string? PhoneNumber { get; set; }
         public string? Address { get; set; }
         public string? Status { get; set; } // Đang làm việc, nghỉ việc, nghỉ phép
+        public string? Description { get; set; }
         public ICollection<WorkAssignment>? WorkAssignments { get; set; }
     }
 } 

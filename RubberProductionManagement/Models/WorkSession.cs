@@ -8,6 +8,7 @@ namespace RubberProductionManagement.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string Status { get; set; } = string.Empty; // Chuẩn bị/Đang thực hiện/Hoàn thành
+        public string? Description { get; set; }
         public ICollection<WorkAssignment>? WorkAssignments { get; set; }
     }
 } 

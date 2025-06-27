@@ -12,8 +12,8 @@ using RubberProductionManagement.Data;
 namespace RubberProductionManagement.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250614082053_tuannee2")]
-    partial class tuannee2
+    [Migration("20250626114330_Tuan")]
+    partial class Tuan
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,6 +40,9 @@ namespace RubberProductionManagement.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Changes")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Description")
                         .HasColumnType("longtext");
 
                     b.Property<string>("RecordId")
@@ -69,6 +72,9 @@ namespace RubberProductionManagement.Migrations
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Note")
                         .HasColumnType("longtext");
@@ -107,6 +113,9 @@ namespace RubberProductionManagement.Migrations
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Description")
                         .HasColumnType("longtext");
 
                     b.Property<string>("EmployeeCode")
@@ -181,6 +190,9 @@ namespace RubberProductionManagement.Migrations
                     b.Property<double>("Area")
                         .HasColumnType("double");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("LotCode")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -204,6 +216,9 @@ namespace RubberProductionManagement.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
 
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
@@ -243,6 +258,9 @@ namespace RubberProductionManagement.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -262,6 +280,9 @@ namespace RubberProductionManagement.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("EmployeeCode")
                         .IsRequired()
@@ -311,6 +332,9 @@ namespace RubberProductionManagement.Migrations
                     b.Property<double>("AssignedArea")
                         .HasColumnType("double");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
                     b.Property<int?>("EmployeeId")
                         .HasColumnType("int");
 
@@ -347,6 +371,9 @@ namespace RubberProductionManagement.Migrations
                         .HasColumnType("int");
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime(6)");

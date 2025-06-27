@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RubberProductionManagement.Data;
 using RubberProductionManagement.Models;
+using RubberProductionManagement.Services;
+using Newtonsoft.Json;
 
 namespace RubberProductionManagement.Controllers
 {
@@ -10,9 +12,11 @@ namespace RubberProductionManagement.Controllers
     public class TeamsController : ControllerBase
     {
         private readonly AppDbContext _context;
-        public TeamsController(AppDbContext context)
+        private readonly AuditLogService _auditLogService;
+        public TeamsController(AppDbContext context, AuditLogService auditLogService)
         {
             _context = context;
+            _auditLogService = auditLogService;
         }
 
         [HttpGet]
@@ -35,6 +39,13 @@ namespace RubberProductionManagement.Controllers
         {
             _context.Teams.Add(team);
             await _context.SaveChangesAsync();
+            await _auditLogService.LogAsync(
+                action: "Create",
+                tableName: "Team",
+                recordId: team.Id.ToString(),
+                changes: JsonConvert.SerializeObject(team),
+                description: "Thêm mới đội"
+            );
             return CreatedAtAction(nameof(Get), new { id = team.Id }, team);
         }
 
@@ -44,6 +55,13 @@ namespace RubberProductionManagement.Controllers
             if (id != team.Id) return BadRequest();
             _context.Entry(team).State = EntityState.Modified;
             await _context.SaveChangesAsync();
+            await _auditLogService.LogAsync(
+                action: "Update",
+                tableName: "Team",
+                recordId: team.Id.ToString(),
+                changes: JsonConvert.SerializeObject(team),
+                description: "Cập nhật đội"
+            );
             return NoContent();
         }
 
@@ -54,6 +72,13 @@ namespace RubberProductionManagement.Controllers
             if (team == null) return NotFound();
             _context.Teams.Remove(team);
             await _context.SaveChangesAsync();
+            await _auditLogService.LogAsync(
+                action: "Delete",
+                tableName: "Team",
+                recordId: id.ToString(),
+                changes: JsonConvert.SerializeObject(team),
+                description: "Xóa đội"
+            );
             return NoContent();
         }
     }

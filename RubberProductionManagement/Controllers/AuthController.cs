@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RubberProductionManagement.Models.DTOs;
 using RubberProductionManagement.Services;
+using Newtonsoft.Json;
 
 namespace RubberProductionManagement.Controllers
 {
@@ -10,20 +11,30 @@ namespace RubberProductionManagement.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
+        private readonly AuditLogService _auditLogService;
 
-        public AuthController(IAuthService authService)
+        public AuthController(IAuthService authService, AuditLogService auditLogService)
         {
             _authService = authService;
+            _auditLogService = auditLogService;
         }
 
         [HttpPost("register")]
         [Authorize(Roles = "Admin")]
         
+
         public async Task<ActionResult<UserResponseDTO>> Register(UserRegistrationDTO model)
         {
             try
             {
                 var result = await _authService.Register(model);
+                await _auditLogService.LogAsync(
+                    action: "Create",
+                    tableName: "User",
+                    recordId: result.Id.ToString(),
+                    changes: JsonConvert.SerializeObject(result),
+                    description: "Tạo tài khoản mới"
+                );
                 return Ok(result);
             }
             catch (Exception ex)

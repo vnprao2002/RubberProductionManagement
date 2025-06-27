@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RubberProductionManagement.Data;
 using RubberProductionManagement.Models;
+using RubberProductionManagement.Services;
+using Newtonsoft.Json;
 
 namespace RubberProductionManagement.Controllers
 {
@@ -10,9 +12,11 @@ namespace RubberProductionManagement.Controllers
     public class WorkAssignmentsController : ControllerBase
     {
         private readonly AppDbContext _context;
-        public WorkAssignmentsController(AppDbContext context)
+        private readonly AuditLogService _auditLogService;
+        public WorkAssignmentsController(AppDbContext context, AuditLogService auditLogService)
         {
             _context = context;
+            _auditLogService = auditLogService;
         }
 
         [HttpGet]
@@ -43,6 +47,13 @@ namespace RubberProductionManagement.Controllers
         {
             _context.WorkAssignments.Add(assignment);
             await _context.SaveChangesAsync();
+            await _auditLogService.LogAsync(
+                action: "Create",
+                tableName: "WorkAssignment",
+                recordId: assignment.Id.ToString(),
+                changes: JsonConvert.SerializeObject(assignment),
+                description: "Thêm mới phân công công việc"
+            );
             return CreatedAtAction(nameof(Get), new { id = assignment.Id }, assignment);
         }
 
@@ -52,6 +63,13 @@ namespace RubberProductionManagement.Controllers
             if (id != assignment.Id) return BadRequest();
             _context.Entry(assignment).State = EntityState.Modified;
             await _context.SaveChangesAsync();
+            await _auditLogService.LogAsync(
+                action: "Update",
+                tableName: "WorkAssignment",
+                recordId: assignment.Id.ToString(),
+                changes: JsonConvert.SerializeObject(assignment),
+                description: "Cập nhật phân công công việc"
+            );
             return NoContent();
         }
             
@@ -62,6 +80,13 @@ namespace RubberProductionManagement.Controllers
             if (assignment == null) return NotFound();
             _context.WorkAssignments.Remove(assignment);
             await _context.SaveChangesAsync();
+            await _auditLogService.LogAsync(
+                action: "Delete",
+                tableName: "WorkAssignment",
+                recordId: id.ToString(),
+                changes: JsonConvert.SerializeObject(assignment),
+                description: "Xóa phân công công việc"
+            );
             return NoContent();
         }
 

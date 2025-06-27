@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RubberProductionManagement.Data;
 using RubberProductionManagement.Models;
+using RubberProductionManagement.Services;
+using Newtonsoft.Json;
 
 namespace RubberProductionManagement.Controllers
 {
@@ -10,9 +12,11 @@ namespace RubberProductionManagement.Controllers
     public class WorkSessionsController : ControllerBase
     {
         private readonly AppDbContext _context;
-        public WorkSessionsController(AppDbContext context)
+        private readonly AuditLogService _auditLogService;
+        public WorkSessionsController(AppDbContext context, AuditLogService auditLogService)
         {
             _context = context;
+            _auditLogService = auditLogService;
         }
 
         [HttpGet]
@@ -42,6 +46,14 @@ namespace RubberProductionManagement.Controllers
                     .ThenInclude(wa => wa.RubberLot)
                 .FirstOrDefaultAsync(ws => ws.Id == session.Id);
             
+            await _auditLogService.LogAsync(
+                action: "Create",
+                tableName: "WorkSession",
+                recordId: session.Id.ToString(),
+                changes: JsonConvert.SerializeObject(session),
+                description: "Thêm mới phiên làm việc"
+            );
+            
             return CreatedAtAction(nameof(Get), new { id = session.Id }, createdSession);
         }
 
@@ -51,6 +63,13 @@ namespace RubberProductionManagement.Controllers
             if (id != session.Id) return BadRequest();
             _context.Entry(session).State = EntityState.Modified;
             await _context.SaveChangesAsync();
+            await _auditLogService.LogAsync(
+                action: "Update",
+                tableName: "WorkSession",
+                recordId: session.Id.ToString(),
+                changes: JsonConvert.SerializeObject(session),
+                description: "Cập nhật phiên làm việc"
+            );
             return NoContent();
         }
 
@@ -61,6 +80,13 @@ namespace RubberProductionManagement.Controllers
             if (session == null) return NotFound();
             _context.WorkSessions.Remove(session);
             await _context.SaveChangesAsync();
+            await _auditLogService.LogAsync(
+                action: "Delete",
+                tableName: "WorkSession",
+                recordId: id.ToString(),
+                changes: JsonConvert.SerializeObject(session),
+                description: "Xóa phiên làm việc"
+            );
             return NoContent();
         }
     }

@@ -13,5 +13,6 @@ namespace RubberProductionManagement.Models
         public string? Note { get; set; }
         public string? Weather { get; set; }
         public string? Quality { get; set; }
+        public string? Description { get; set; }
     }
 } 

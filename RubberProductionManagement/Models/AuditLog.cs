@@ -9,5 +9,6 @@ namespace RubberProductionManagement.Models
         public string? RecordId { get; set; }
         public string? Changes { get; set; }
         public DateTime ChangedAt { get; set; }
+        public string? Description { get; set; }
     }
 } 

@@ -25,6 +25,8 @@ namespace RubberProductionManagement.Models
         [Required]
         public string Role { get; set; } // "Admin" hoặc "Manager"
 
+        public string? Description { get; set; }
+
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? LastModifiedAt { get; set; }
     }
